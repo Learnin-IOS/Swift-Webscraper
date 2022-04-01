@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8F4DA55927F6875800996AE6 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4DA55827F6875800996AE6 /* main.swift */; };
+		8F4DA56127F68D6B00996AE6 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 8F4DA56027F68D6B00996AE6 /* SwiftSoup */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F4DA56127F68D6B00996AE6 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +80,9 @@
 			dependencies = (
 			);
 			name = "Swift WebScraper";
+			packageProductDependencies = (
+				8F4DA56027F68D6B00996AE6 /* SwiftSoup */,
+			);
 			productName = "Swift WebScraper";
 			productReference = 8F4DA55527F6875800996AE6 /* Swift WebScraper */;
 			productType = "com.apple.product-type.tool";
@@ -106,6 +111,9 @@
 				Base,
 			);
 			mainGroup = 8F4DA54C27F6875800996AE6;
+			packageReferences = (
+				8F4DA55F27F68D6B00996AE6 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+			);
 			productRefGroup = 8F4DA55627F6875800996AE6 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -280,6 +288,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8F4DA55F27F68D6B00996AE6 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8F4DA56027F68D6B00996AE6 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8F4DA55F27F68D6B00996AE6 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8F4DA54D27F6875800996AE6 /* Project object */;
 }
