@@ -11,7 +11,8 @@ import SwiftSoup
 let url = URL(string: "https://en.wikipedia.org/wiki/Aglaonema")!
 let html = try String(contentsOf: url)
 let document = try SwiftSoup.parse(html)
-//print(html.prefix(200))
 
-print(try document.title())
+let description = try document.select("#Description").first()!
+
+print(description)
 
