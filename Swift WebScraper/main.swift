@@ -6,6 +6,12 @@
 //
 
 import Foundation
+import SwiftSoup
 
-print("Hello, World!")
+let url = URL(string: "https://en.wikipedia.org/wiki/Aglaonema")!
+let html = try String(contentsOf: url)
+let document = try SwiftSoup.parse(html)
+//print(html.prefix(200))
+
+print(try document.title())
 
