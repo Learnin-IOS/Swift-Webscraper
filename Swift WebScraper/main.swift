@@ -8,28 +8,30 @@
 import Foundation
 import SwiftSoup
 
-func scrapeHousePlantSpecies(url: URL) throws -> String {
+func scrapeHouseplant(url: URL) throws {
     
     let html = try String(contentsOf: url)
     let document = try SwiftSoup.parse(html)
-
-    let descriptionSpan = try document.select("#Description").first()!
-
-    let h2 = descriptionSpan.parent()!
-    var element = h2
-
-    var result = ""
-    while true
-                {
-        guard let sibling = try element.nextElementSibling() else { break }
-        if sibling.tagName() != "p" {
-            break
+    
+    let span = try document.select(
+        "#List_of_common_houseplants")
+            .first()!
+        
+        let h2 = span.parent()!
+        var element = h2
+        
+        
+        while true
+        {
+            guard let sibling = try element.nextElementSibling() else { break }
+            print(sibling.tagName())
+            if sibling.tagName() == "h2" {
+                break
+            }
+            element = sibling
         }
-        result += try sibling.text()
-        element = sibling
-    }
-    return result
-}
+        }
+        
+        let url = URL(string: "https://en.wikipedia.org/wiki/Houseplant")!
+        print(try scrapeHouseplant(url: url))
 
-let url = URL(string: "https://en.wikipedia.org/wiki/Aglaonema")!
-print(try scrapeHousePlantSpecies(url: url))
