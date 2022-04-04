@@ -19,15 +19,17 @@ typealias HouseplantInfoDictionary = [String: HouseplantInfo]
 // The Key is a category name
 typealias HouseplantCategoryDictionary = [String: HouseplantInfoDictionary]
 
-func scrapeHouseplant(url: URL) throws {
+func scrapeHouseplant(url: URL) throws -> HouseplantInfo {
     
     let html = try String(contentsOf: url)
     let document = try SwiftSoup.parse(html)
     
+    var element : Element?
+    
     let span = try document.select("#Description").first()
-        ?? document.select("#Decription_and_biology").first()
-        ?? document.select("#Name_and_description").first()
-        ?? document.select("#Plant_care").first()
+    ?? document.select("#Decription_and_biology").first()
+    ?? document.select("#Name_and_description").first()
+    ?? document.select("#Plant_care").first()
     
     if span != nil {
         let h2 = span!.parent()!
@@ -47,11 +49,11 @@ func scrapeHouseplant(url: URL) throws {
         }
         description += try element!.text()
         element = try element!.nextElementSibling()
-
+        
     }
-        return HouseplantInfo(description: description)
+    return HouseplantInfo(description: description)
 }
- 
+
 // Remove [...] or (...) text from a string.
 
 func clean(name: String) -> String  {
@@ -60,42 +62,43 @@ func clean(name: String) -> String  {
 }
 
 func scrapeHouseplantts(url: URL)throws -> HouseplantCategoryDictionary{
-
+    
     let html = try String(contentsOf: url)
     let document = try SwiftSoup.parse(html)
     
     
     let span = try document.select("#List_of_common_houseplants").first()!
-    let h2 = span.parent()
+    let h2 = span.parent()!
     var element = h2
     
     var categories = HouseplantCategoryDictionary()
     var categoryName: String = ""
     
-}
+    
     
     
     while true
     {
         guard let sibling = try element.nextElementSibling() else { break }
-//        print(sibling.tagName())
+        //        print(sibling.tagName())
         switch sibling.tagName(){
         case "h2":
             // We know the first h2 comes after the end of categories.
             return categories
         case "h3":
             // If there's an existing category name, add it to the Dictionary
-            categoryName = clean(name:  try child.text())
+            categoryName = clean(name:  try sibling.text())
             categories[categoryName] = HouseplantInfoDictionary()
-//            print(try sibling.children().first()!.text())
+            //            print(try sibling.children().first()!.text())
         case "ul":
             for child in sibling.children() {
-                print(" ", try child.text())
+//                print(" ", try child.text())
+                let plantName = clean(name: try child.text())
                 let a = try child.getElementsByTag("a").first()!
                 let href = try a.attr("href")
                 let infoURL = URL(string: "href", relativeTo: url)!
                 categories[categoryName]![plantName] = (try scrapeHouseplant(url: infoURL))
-//                print(try scrapeHouseplant(url: speciesURL))
+                //                print(try scrapeHouseplant(url: speciesURL))
             }
         default:
             break
@@ -115,3 +118,5 @@ let json = try encoder.encode(houseplants)
 let jsonString = String(decoding: json, as: UTF8.self)
 print(jsonString)
 
+let outputFile = URL(fileURLWithPath: "//Users/lebonbbauma/Desktop/houseplants.json")
+try jsonString.write(to: outputFile, atomically: true, encoding: String.Encoding.utf8)
