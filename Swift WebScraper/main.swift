@@ -49,10 +49,30 @@ func scrapeHouseplant(url: URL) throws {
         element = try element!.nextElementSibling()
 
     }
-        return description
+        return HouseplantInfo(description: description)
 }
-    let h2 = span.parent()!
+ 
+// Remove [...] or (...) text from a string.
+
+func clean(name: String) -> String  {
+    name.replacingOccurrences(of: #"(\s*\[.*]|\s*\(.*\)) "#, with: "", options: .regularExpression)
+    
+}
+
+func scrapeHouseplantts(url: URL)throws -> HouseplantCategoryDictionary{
+
+    let html = try String(contentsOf: url)
+    let document = try SwiftSoup.parse(html)
+    
+    
+    let span = try document.select("#List_of_common_houseplants").first()!
+    let h2 = span.parent()
     var element = h2
+    
+    var categories = HouseplantCategoryDictionary()
+    var categoryName: String = ""
+    
+}
     
     
     while true
@@ -61,24 +81,37 @@ func scrapeHouseplant(url: URL) throws {
 //        print(sibling.tagName())
         switch sibling.tagName(){
         case "h2":
-            return
+            // We know the first h2 comes after the end of categories.
+            return categories
         case "h3":
-            print(try sibling.children().first()!.text())
+            // If there's an existing category name, add it to the Dictionary
+            categoryName = clean(name:  try child.text())
+            categories[categoryName] = HouseplantInfoDictionary()
+//            print(try sibling.children().first()!.text())
         case "ul":
             for child in sibling.children() {
                 print(" ", try child.text())
                 let a = try child.getElementsByTag("a").first()!
                 let href = try a.attr("href")
-                let speciesURL = URL(string: "href", relativeTo: url)!
-                print(try scrapeHouseplant(url: speciesURL))
+                let infoURL = URL(string: "href", relativeTo: url)!
+                categories[categoryName]![plantName] = (try scrapeHouseplant(url: infoURL))
+//                print(try scrapeHouseplant(url: speciesURL))
             }
         default:
             break
         }
         element = sibling
     }
+    return categories
 }
 
 let url = URL(string: "https://en.wikipedia.org/wiki/Houseplant")!
-print(try scrapeHouseplant(url: url))
+//print(try scrapeHouseplant(url: url))
+let houseplants = try scrapeHouseplant(url: url)
+
+let encoder =  JSONEncoder()
+encoder.outputFormatting = .prettyPrinted
+let json = try encoder.encode(houseplants)
+let jsonString = String(decoding: json, as: UTF8.self)
+print(jsonString)
 
