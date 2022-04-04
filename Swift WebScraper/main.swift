@@ -21,7 +21,7 @@ func scrapeHouseplant(url: URL) throws {
     while true
     {
         guard let sibling = try element.nextElementSibling() else { break }
-        print(sibling.tagName())
+//        print(sibling.tagName())
         switch sibling.tagName(){
         case "h2":
             return
@@ -30,6 +30,10 @@ func scrapeHouseplant(url: URL) throws {
         case "ul":
             for child in sibling.children() {
                 print(" ", try child.text())
+                let a = try child.getElementsByTag("a").first()!
+                let href = try a.attr("href")
+                let speciesURL = URL(string: "href", relativeTo: url)!
+                print(try scrapeHouseplant(url: speciesURL))
             }
         default:
             break
