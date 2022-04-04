@@ -8,6 +8,12 @@
 import Foundation
 import SwiftSoup
 
+
+struct HouseplantInfo : Codable {
+    var description: String
+}
+
+// The key is a houseplant name 
 func scrapeHouseplant(url: URL) throws {
     
     let html = try String(contentsOf: url)
