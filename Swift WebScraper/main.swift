@@ -27,18 +27,19 @@ func scrapeHouseplant(url: URL) throws {
         element = div.first()?.children()[3]
     }
     
-//    var description = ""
-//    while element != nil {
-//        // Stop at the next "h" tag. (h2, h3,etc)
-//        if element!.tagName().starts(with:"h"){
-//            break
-//        }
-//        description += try element!.text()
-//        element = try element!.nextElementSibling()
-//        
-//    }
-//        return description
-//}
+    
+    var description = ""
+    while element != nil {
+        // Stop at the next "h" tag. (h2, h3,etc)
+        if element!.tagName().starts(with:"h"){
+            break
+        }
+        description += try element!.text()
+        element = try element!.nextElementSibling()
+
+    }
+        return description
+}
     let h2 = span.parent()!
     var element = h2
     
