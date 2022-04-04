@@ -13,7 +13,12 @@ struct HouseplantInfo : Codable {
     var description: String
 }
 
-// The key is a houseplant name 
+// The key is a houseplant name
+typealias HouseplantInfoDictionary = [String: HouseplantInfo]
+
+// The Key is a category name
+typealias HouseplantCategoryDictionary = [String: HouseplantInfoDictionary]
+
 func scrapeHouseplant(url: URL) throws {
     
     let html = try String(contentsOf: url)
