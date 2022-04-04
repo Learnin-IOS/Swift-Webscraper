@@ -13,7 +13,32 @@ func scrapeHouseplant(url: URL) throws {
     let html = try String(contentsOf: url)
     let document = try SwiftSoup.parse(html)
     
-    let span = try document.select("#List_of_common_houseplants").first()!
+    let span = try document.select("#Description").first()
+        ?? document.select("#Decription_and_biology").first()
+        ?? document.select("#Name_and_description").first()
+        ?? document.select("#Plant_care").first()
+    
+    if span != nil {
+        let h2 = span!.parent()!
+        element = try h2.nextElementSibling()
+    }   else {
+        // Start collecting text from the beginning og the web page.
+        let div = try document.select(".mw-parser-output")
+        element = div.first()?.children()[3]
+    }
+    
+//    var description = ""
+//    while element != nil {
+//        // Stop at the next "h" tag. (h2, h3,etc)
+//        if element!.tagName().starts(with:"h"){
+//            break
+//        }
+//        description += try element!.text()
+//        element = try element!.nextElementSibling()
+//        
+//    }
+//        return description
+//}
     let h2 = span.parent()!
     var element = h2
     
